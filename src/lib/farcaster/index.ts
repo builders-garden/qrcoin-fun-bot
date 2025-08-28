@@ -41,8 +41,15 @@ export const createCast = async ({
   
   Tag @bankr to place a bid before the time is up!`;
 
-  await neynar.publishCast({
-    signerUuid: env.FARCASTER_SIGNER_UUID,
-    text,
+  await fetch("https://api.neynar.com/v2/farcaster/cast", {
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+      "x-api-key": env.NEYNAR_API_KEY,
+    },
+    body: JSON.stringify({
+      signer_uuid: env.FARCASTER_SIGNER_UUID,
+      text,
+    }),
   });
 };
