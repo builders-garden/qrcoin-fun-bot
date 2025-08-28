@@ -1,0 +1,3 @@
+# 🤖 qrcoin-fun-bot
+
+WIP.
