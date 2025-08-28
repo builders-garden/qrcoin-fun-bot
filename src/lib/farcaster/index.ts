@@ -1,4 +1,3 @@
-import { neynar } from "./neynar";
 import { formatUnits, Hex } from "viem";
 // @ts-ignore
 import * as sd from "simple-duration";
@@ -19,13 +18,21 @@ export const createCast = async ({
   leadBid: bigint;
   isContribution?: boolean;
 }) => {
-  const { result } = await neynar.fetchBulkUsersByEthOrSolAddress({
-    addresses: [address],
-  });
+  const res = await fetch(
+    `https://api.neynar.com/v2/farcaster/user/bulk-by-address?addresses=${address}`,
+    {
+      headers: {
+        "x-api-key": env.NEYNAR_API_KEY,
+      },
+    }
+  );
+
+  const result = await res.json();
+  const user = (result as any)[address];
 
   let username = address as string;
-  if (result && result.length > 0) {
-    username = `@${result[0]?.username}`;
+  if (user) {
+    username = `@${user[0].username}`;
   }
 
   const timeRemaining = sd.stringify(
@@ -34,12 +41,12 @@ export const createCast = async ({
 
   const text = `new ${isContribution ? "contribution" : "bid"} by ${username}!
   
-  - amount: ${formatUnits(amount, 6)} USDC
-  - link: [${url}]
-  - time remaining: ${timeRemaining}
-  - current lead bid: ${formatUnits(leadBid, 6)} USDC
+- amount: ${formatUnits(amount, 6)} USDC
+- link: [${url}]
+- time remaining: ${timeRemaining}
+- current lead bid: ${formatUnits(leadBid, 6)} USDC
   
-  Tag @bankr to place a bid before the time is up!`;
+Tag @bankr to place a bid before the time is up!`;
 
   await fetch("https://api.neynar.com/v2/farcaster/cast", {
     headers: {
@@ -47,6 +54,7 @@ export const createCast = async ({
       "content-type": "application/json",
       "x-api-key": env.NEYNAR_API_KEY,
     },
+    method: "POST",
     body: JSON.stringify({
       signer_uuid: env.FARCASTER_SIGNER_UUID,
       text,
