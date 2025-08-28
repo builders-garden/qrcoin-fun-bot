@@ -3,6 +3,7 @@ import { createCast } from "./lib/farcaster";
 import { createPublicClient, http } from "viem";
 import { base } from "viem/chains";
 import { env } from "./env";
+import { createTweet } from "./lib/x";
 
 ponder.on("qrAuctionV4:AuctionBid", async ({ event, context }) => {
   const { bidder, amount, endTime, urlString, name } = event.args;
@@ -29,13 +30,13 @@ ponder.on("qrAuctionV4:AuctionBid", async ({ event, context }) => {
       leadBid,
       endTime,
     }),
-    // createTweet({
-    //   name,
-    //   amount,
-    //   url: urlString,
-    //   leadBid,
-    //   endTime,
-    // }),
+    createTweet({
+      name,
+      amount,
+      url: urlString,
+      leadBid,
+      endTime,
+    }),
   ]);
 });
 
@@ -65,13 +66,13 @@ ponder.on("qrAuctionV4:BidContributionMade", async ({ event, context }) => {
       leadBid,
       isContribution: true,
     }),
-    // createTweet({
-    //   name,
-    //   amount,
-    //   url: urlString,
-    //   endTime,
-    //   leadBid,
-    //   isContribution: true,
-    // }),
+    createTweet({
+      name,
+      amount,
+      url: urlString,
+      endTime,
+      leadBid,
+      isContribution: true,
+    }),
   ]);
 });
