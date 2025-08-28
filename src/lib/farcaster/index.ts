@@ -32,7 +32,7 @@ export const createCast = async ({
 
   let username = address as string;
   if (user) {
-    username = `${user[0].username}`;
+    username = `@${user[0].username}`;
   }
 
   const timeRemaining = sd.stringify(
@@ -46,7 +46,7 @@ export const createCast = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: ${formatUnits(leadBid, 6)} USDC
   
-Tag bankr to place a bid before the time is up!`;
+Tag @bankr to place a bid before the time is up!`;
 
   await fetch("https://api.neynar.com/v2/farcaster/cast", {
     headers: {

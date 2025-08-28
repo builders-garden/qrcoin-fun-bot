@@ -22,14 +22,14 @@ export const createTweet = async ({
     Math.floor(Number(endTime) - Date.now() / 1000)
   );
 
-  const text = `new ${isContribution ? "contribution" : "bid"} by ${name}!
+  const text = `new ${isContribution ? "contribution" : "bid"} by @${name}!
       
 - amount: ${formatUnits(amount, 6)} USDC
 - link: [${url}]
 - time remaining: ${timeRemaining}
 - current lead bid: ${formatUnits(leadBid, 18)} USDC
 
-Tag bankr to place a bid before the time is up!`;
+Tag @bankr to place a bid before the time is up!`;
 
   await twitterClient.readWrite.v2.tweet(text);
 };
