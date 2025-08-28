@@ -31,5 +31,5 @@ export const createTweet = async ({
 
 Tag bankr to place a bid before the time is up!`;
 
-  await twitterClient.v2.tweet(text);
+  await twitterClient.readWrite.v2.tweet(text);
 };
