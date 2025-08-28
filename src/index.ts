@@ -3,13 +3,14 @@ import { createCast } from "./lib/farcaster";
 import { createTweet } from "./lib/x";
 import { createPublicClient, http } from "viem";
 import { base } from "viem/chains";
+import { env } from "./env";
 
 ponder.on("qrAuctionV4:AuctionBid", async ({ event, context }) => {
   const { bidder, amount, endTime, urlString, name } = event.args;
 
   const publicClient = createPublicClient({
     chain: base,
-    transport: http(process.env.PONDER_RPC_URL_8453),
+    transport: http(env.PONDER_RPC_URL_8453),
   });
 
   const auction = await publicClient.readContract({
@@ -44,7 +45,7 @@ ponder.on("qrAuctionV4:BidContributionMade", async ({ event, context }) => {
 
   const publicClient = createPublicClient({
     chain: base,
-    transport: http(process.env.PONDER_RPC_URL_8453),
+    transport: http(env.PONDER_RPC_URL_8453),
   });
 
   const auction = await publicClient.readContract({

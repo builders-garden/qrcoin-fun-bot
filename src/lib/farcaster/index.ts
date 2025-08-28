@@ -2,6 +2,7 @@ import { neynar } from "./neynar";
 import { formatUnits, Hex } from "viem";
 // @ts-ignore
 import * as sd from "simple-duration";
+import { env } from "../../env";
 
 export const createCast = async ({
   address,
@@ -41,7 +42,7 @@ export const createCast = async ({
   Tag @bankr to place a bid before the time is up!`;
 
   await neynar.publishCast({
-    signerUuid: process.env.FARCASTER_SIGNER_UUID!,
+    signerUuid: env.FARCASTER_SIGNER_UUID,
     text,
   });
 };
