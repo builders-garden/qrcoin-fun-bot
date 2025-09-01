@@ -9,6 +9,7 @@ export const createTweet = async ({
   url,
   endTime,
   leadBid,
+  totalBidAmount = 0n,
   isContribution = false,
 }: {
   name: string;
@@ -16,13 +17,30 @@ export const createTweet = async ({
   url: string;
   endTime: bigint;
   leadBid: bigint;
+  totalBidAmount?: bigint;
   isContribution?: boolean;
 }) => {
   const timeRemaining = sd.stringify(
     Math.floor(Number(endTime) - Date.now() / 1000)
   );
 
-  const text = `new ${isContribution ? "contribution" : "bid"} by @${name}!
+  if (isContribution) {
+    const text = `new contribution by @${name}!
+        
+- contribution: ${formatUnits(amount, 6)} USDC
+- total bid amount: ${formatUnits(totalBidAmount, 18)} USDC
+- link: [${url}]
+- time remaining: ${timeRemaining}
+- current lead bid: ${formatUnits(leadBid, 18)} USDC
+
+Tag @bankr to place a bid before the time is up!`;
+
+    await twitterClient.readWrite.v2.tweet(text);
+
+    return;
+  }
+
+  const text = `new bid by @${name}!
       
 - amount: ${formatUnits(amount, 6)} USDC
 - link: [${url}]
