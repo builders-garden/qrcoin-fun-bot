@@ -28,10 +28,10 @@ export const createCast = async ({
     const text = `new contribution by @${name}!
         
 - contribution: $${formatUnits(amount, 6)}
-- total bid amount: $${formatUnits(totalBidAmount, 18)}
+- total bid amount: $${formatUnits(totalBidAmount, 6)}
 - link: [${url}]
 - time remaining: ${timeRemaining}
-- current lead bid: $${formatUnits(leadBid, 18)}
+- current lead bid: $${formatUnits(leadBid, 6)}
 
 Tag @bankr to place a bid before the time is up!`;
 
