@@ -58,7 +58,7 @@ const createFromEvent = async ({
     (account) => account.platform === "x"
   )?.username;
 
-  await Promise.all([
+  await Promise.allSettled([
     createCast({
       name: farcasterUsername ? farcasterUsername : name ? name : address,
       amount,
