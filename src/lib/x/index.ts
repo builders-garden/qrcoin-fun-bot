@@ -33,7 +33,7 @@ export const createTweet = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-Tag @bankr to place a bid before the time is up!`;
+Tag @bankrbot to place a bid before the time is up!`;
 
     await twitterClient.readWrite.v2.tweet(text);
 
@@ -47,7 +47,7 @@ Tag @bankr to place a bid before the time is up!`;
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-Tag @bankr to place a bid before the time is up!`;
+Tag @bankrbot to place a bid before the time is up!`;
 
   await twitterClient.readWrite.v2.tweet(text);
 };
