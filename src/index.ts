@@ -4,6 +4,7 @@ import { Abi, createPublicClient, Hex, http } from "viem";
 import { base } from "viem/chains";
 import { env } from "./env";
 import { createTweet } from "./lib/x";
+import { BulkUsersByAddressResponse } from "@neynar/nodejs-sdk/build/api";
 
 const createFromEvent = async ({
   address,
@@ -50,12 +51,12 @@ const createFromEvent = async ({
   );
 
   const result = await res.json();
-  const farcasterUser = (result as any)[address];
+  const farcasterUser = (result as BulkUsersByAddressResponse)[address];
 
-  const farcasterUsername = farcasterUser[0]?.username;
-  const xUsername = farcasterUser[0]?.verified_accounts.find(
-    (account: any) => account.platform === "x"
-  ).username;
+  const farcasterUsername = farcasterUser?.[0]?.username;
+  const xUsername = farcasterUser?.[0]?.verified_accounts?.find(
+    (account) => account.platform === "x"
+  )?.username;
 
   await Promise.all([
     createCast({
