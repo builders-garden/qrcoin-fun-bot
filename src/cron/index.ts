@@ -3,7 +3,7 @@ import { generateText } from "ai";
 import { env } from "../env";
 import { twitterClient } from "../lib/x/x-api";
 
-const SYSTEM_TEMPLATE = `Write the assistant personality here.\n\nRewrite the following tweet:\n\n`;
+const SYSTEM_TEMPLATE = `Write the assistant personality here.\n\nRewrite the following tweet. Just return the rewritten tweet, no other text.\n\n`;
 
 const getAIXBTLatestPost = async () => {
   const aixbtAgent = await twitterClient.readOnly.v2.userByUsername(
