@@ -8,6 +8,8 @@ const envSchema = z.object({
   X_APP_SECRET: z.string(),
   TWITTER_ACCESS_TOKEN_KEY: z.string(),
   TWITTER_ACCESS_TOKEN_SECRET: z.string(),
+  OPENAI_MODEL: z.string().default("gpt-4o-mini"),
+  OPENAI_API_KEY: z.string(),
 });
 
 export const env = envSchema.parse(process.env);

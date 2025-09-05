@@ -12,8 +12,11 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.24",
     "@neynar/nodejs-sdk": "^3.34.0",
+    "ai": "^5.0.33",
     "hono": "^4.5.0",
+    "node-cron": "^4.2.1",
     "ponder": "^0.12.16",
     "simple-duration": "^1.1.1",
     "twitter-api-v2": "^1.25.0",

@@ -5,6 +5,8 @@ import { base } from "viem/chains";
 import { env } from "./env";
 import { createTweet } from "./lib/x";
 import { BulkUsersByAddressResponse } from "@neynar/nodejs-sdk/build/api";
+import * as cron from "node-cron";
+import { cronJob } from "./cron";
 
 const createFromEvent = async ({
   address,
@@ -79,6 +81,16 @@ const createFromEvent = async ({
     }),
   ]);
 };
+
+ponder.on("qrAuctionV4:setup", async () => {
+  console.log("setting up cron job");
+  // every 1 hour
+  cron.schedule("* * * * *", async () => {
+    console.log("running cron job");
+    await cronJob();
+  });
+  console.log("cron job set up");
+});
 
 ponder.on("qrAuctionV4:AuctionBid", async ({ event, context }) => {
   const { bidder, amount, endTime, urlString, name } = event.args;
