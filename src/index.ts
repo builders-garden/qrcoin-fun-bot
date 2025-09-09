@@ -85,7 +85,7 @@ const createFromEvent = async ({
 ponder.on("qrAuctionV4:setup", async () => {
   console.log("setting up cron job");
   // every 1 hour
-  cron.schedule("* * * * *", async () => {
+  cron.schedule("0 * * * *", async () => {
     console.log("running cron job");
     await cronJob();
   });

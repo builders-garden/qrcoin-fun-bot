@@ -1,5 +1,24 @@
 # 🤖 qrcoin-fun-bot
 
+A dual-purpose bot that monitors QR auction events and reposts AI-rewritten content from X/Twitter to both X and Farcaster.
+
+## 🚀 Features
+
+### 1. 📡 Real-time Auction Event Monitoring
+
+The bot continuously monitors the QR auction smart contract on Base chain and automatically posts updates to both X and Farcaster when:
+
+- **New bids** are placed on QR auctions
+- **Contributions** are made to existing bids
+
+### 2. 🤖 AI-Powered Content Reposting
+
+The bot runs a cron job every hour to:
+
+- **Fetch the latest post** from a specified X/Twitter account
+- **Rewrite the content** using OpenAI with a custom personality/style
+- **Repost the rewritten content** to both X and Farcaster
+
 ## 📦 Setup
 
 Clone the repository and run `pnpm install` to install the dependencies.
@@ -32,4 +51,9 @@ The assistant personality is the personality of the assistant that will be used 
 
 ### 🚀 Running the bot
 
-The bot leverages [Ponder](https://ponder.sh/) to listen for events and run the bot. To run the bot, run `pnpm dev`. Do not use `pnpm start` as it is reserved for DB production usage, but we don't store any of these events in a DB so we can safely ignore it, and the bot always starts listening from the latest block, so there's no need to use `pnpm start`.
+The bot leverages [Ponder](https://ponder.sh/) to listen for 
+events and run the bot. To run the bot, run `pnpm dev`. Do not 
+use `pnpm start` as it is reserved for DB production usage, but 
+we don't store any of these events in a DB so we can safely 
+ignore it, and the bot always starts listening from the latest 
+block, so there's no need to use `pnpm start`.
