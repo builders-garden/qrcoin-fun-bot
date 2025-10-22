@@ -29,11 +29,11 @@ export const createTweet = async ({
         
 - contribution: $${formatUnits(amount, 6)}
 - total bid amount: $${formatUnits(totalBidAmount, 6)}
-- link: [${url}]
+- link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-Tag @bankrbot to place a bid before the time is up!`;
+https://qrcoin.fun`;
 
     await twitterClient.readWrite.v2.tweet(text);
 
@@ -43,11 +43,11 @@ Tag @bankrbot to place a bid before the time is up!`;
   const text = `new bid by @${name}!
       
 - amount: $${formatUnits(amount, 6)}
-- link: [${url}]
+- link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-Tag @bankrbot to place a bid before the time is up!`;
+https://qrcoin.fun`;
 
   await twitterClient.readWrite.v2.tweet(text);
 };
