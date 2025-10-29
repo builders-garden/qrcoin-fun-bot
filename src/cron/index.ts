@@ -1,61 +1,72 @@
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
 import { env } from "../env";
-import { twitterClient } from "../lib/x/x-api";
-import { SYSTEM_TEMPLATE, X_USERNAME } from "../lib/constants";
+import { twitterClientReadOnly, twitterClient } from "../lib/x/x-api";
+import { SYSTEM_TEMPLATE, X_USERNAMES } from "../lib/constants";
 
-const getAIXBTLatestPost = async () => {
-  const aixbtAgent = await twitterClient.readOnly.v2.userByUsername(
-    X_USERNAME
-  );
+const getLatestPosts = async () => {
+  // Construct search query - exclude retweets, replies, and quote tweets
+  const query = X_USERNAMES.map(
+    (u) => `from:${u} -is:retweet -is:reply -is:quote`
+  ).join(" OR ");
 
-  const posts = aixbtAgent.includes?.tweets;
+  // Perform a single recent search request
+  const searchResult = await twitterClientReadOnly.readOnly.v2.search(query, {
+    max_results: 50,
+    "tweet.fields": ["created_at", "text", "id", "author_id"],
+    expansions: ["author_id"],
+    "user.fields": ["username", "name", "profile_image_url"],
+    sort_order: "recency", // ensure newest first
+  });
 
-  if (!posts || posts.length === 0) {
+  const tweets = searchResult.data.data || [];
+  //const users = searchResult.data.includes?.users || [];
+
+  console.log(`Retrieved ${tweets.length} total tweets from search`);
+
+  if (tweets.length === 0) {
     return null;
   }
 
-  // Calculate timestamp for 1 hour ago
+  // Filter for last hour
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-  
-  // Filter posts from the last hour and sort by creation date (newest first)
-  const recentPosts = posts
-    .filter((post: any) => {
-      const postDate = new Date(post.created_at);
-      return postDate > oneHourAgo;
-    })
-    .sort((a: any, b: any) => {
-      const dateA = new Date(a.created_at);
-      const dateB = new Date(b.created_at);
-      return dateB.getTime() - dateA.getTime(); // Sort newest first
-    });
+  const recentPosts = tweets
+    .filter((tweet: any) => new Date(tweet.created_at) > oneHourAgo)
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 
-  // Log how many posts were found in the last hour
-  if (recentPosts.length > 0) {
-    console.log(`Found ${recentPosts.length} post(s) from the last hour, selecting the most recent`);
-  }
+  // Log posts for debugging
+  recentPosts.forEach((post: any, index: number) => {
+    console.log(`\n--- Post ${index + 1} ---`);
+    console.log(`@${post.username} (${post.name})`);
+    console.log(`Created at: ${post.created_at}`);
+    console.log(`Text: ${post.text}`);
+    console.log(`ID: ${post.id}`);
+    console.log(`Author ID: ${post.author_id}`);
+  });
 
-  // Return the most recent post (first in sorted array)
-  return recentPosts[0] || null;
+  // Return array of just the post texts
+  const validPost = recentPosts.map((post: any) => post.text);
+
+  return validPost;
 };
 
 export const cronJob = async () => {
-  console.log("Checking for posts from @aixbt_agent in the last hour...");
-  
-  const latestPost = await getAIXBTLatestPost();
+  const latestPosts = await getLatestPosts();
 
-  if (!latestPost) {
+  if (!latestPosts) {
     console.log("No posts found from the last hour");
     return;
   }
 
-  console.log(`Found post from ${latestPost.created_at}: ${latestPost.text?.substring(0, 100)}...`);
-
   const { text } = await generateText({
     model: openai(env.OPENAI_MODEL),
-    prompt: `${SYSTEM_TEMPLATE}\n\n${latestPost.text}`,
+    prompt: `${SYSTEM_TEMPLATE}\n\n${latestPosts.join("\n")}`,
   });
-
+  console.log(text, "text");
+  
   await Promise.allSettled([
     twitterClient.readWrite.v2.tweet(text),
     fetch("https://api.neynar.com/v2/farcaster/cast", {

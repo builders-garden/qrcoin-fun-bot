@@ -7,3 +7,7 @@ export const twitterClient = new TwitterApi({
   accessToken: env.TWITTER_ACCESS_TOKEN_KEY,
   accessSecret: env.TWITTER_ACCESS_TOKEN_SECRET,
 });
+
+export const twitterClientReadOnly = new TwitterApi(
+  process.env.TWITTER_BEARER_TOKEN ?? ""
+);
