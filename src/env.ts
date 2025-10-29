@@ -8,6 +8,7 @@ const envSchema = z.object({
   X_APP_SECRET: z.string(),
   TWITTER_ACCESS_TOKEN_KEY: z.string().optional(),
   TWITTER_ACCESS_TOKEN_SECRET: z.string().optional(),
+  TWITTER_BEARER_TOKEN: z.string().optional(),
   OPENAI_MODEL: z.string().default("gpt-4o-mini"),
   OPENAI_API_KEY: z.string(),
 });
