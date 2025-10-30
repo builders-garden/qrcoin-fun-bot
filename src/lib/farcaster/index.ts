@@ -33,7 +33,7 @@ export const createCast = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-https://qrcoin.fun`;
+join the bid: https://qrcoin.fun`;
 
     await fetch("https://api.neynar.com/v2/farcaster/cast", {
       headers: {
@@ -51,14 +51,14 @@ https://qrcoin.fun`;
     return;
   }
 
-  const text = `new bid by @${name}!
+  const text = `new bid started by @${name}!
   
 - amount: $${formatUnits(amount, 6)}
 - link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
   
-https://qrcoin.fun`;
+bid now: https://qrcoin.fun`;
 
   await fetch("https://api.neynar.com/v2/farcaster/cast", {
     headers: {

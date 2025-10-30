@@ -33,21 +33,21 @@ export const createTweet = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-https://qrcoin.fun`;
+join the bid: https://qrcoin.fun`;
 
     await twitterClient.readWrite.v2.tweet(text);
 
     return;
   }
 
-  const text = `new bid by @${name}!
+  const text = `new bid started by @${name}!
       
 - amount: $${formatUnits(amount, 6)}
 - link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-https://qrcoin.fun`;
+bid now: https://qrcoin.fun`;
 
   await twitterClient.readWrite.v2.tweet(text);
 };
