@@ -11,6 +11,7 @@ export const createTweet = async ({
   leadBid,
   totalBidAmount = 0n,
   isContribution = false,
+  embedUrl,
 }: {
   name: string;
   amount: bigint;
@@ -19,35 +20,46 @@ export const createTweet = async ({
   leadBid: bigint;
   totalBidAmount?: bigint;
   isContribution?: boolean;
+  embedUrl?: string;
 }) => {
   const timeRemaining = sd.stringify(
     Math.floor(Number(endTime) - Date.now() / 1000)
   );
 
   if (isContribution) {
-    const text = `new contribution by @${name}!
-        
+    let text = `new contribution by @${name}!
+
 - contribution: $${formatUnits(amount, 6)}
 - total bid amount: $${formatUnits(totalBidAmount, 6)}
 - link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-join the bid: https://qrcoin.fun`;
+join the bid:`;
+
+    // Append embedUrl if provided (Twitter will unfurl as card)
+    if (embedUrl) {
+      text = `${text}\n\n${embedUrl}`;
+    }
 
     await twitterClient.readWrite.v2.tweet(text);
 
     return;
   }
 
-  const text = `new bid started by @${name}!
-      
+  let text = `new bid started by @${name}!
+
 - amount: $${formatUnits(amount, 6)}
 - link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-bid now: https://qrcoin.fun`;
+bid now:`;
+
+  // Append embedUrl if provided (Twitter will unfurl as card)
+  if (embedUrl) {
+    text = `${text}\n\n${embedUrl}`;
+  }
 
   await twitterClient.readWrite.v2.tweet(text);
 };
