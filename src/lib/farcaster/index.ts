@@ -98,23 +98,23 @@ join the bid:`;
     return;
   }
 
-  const text = `new bid started by @${name}!
+  let text = `new bid started by @${name}!
 
 - amount: $${formatUnits(amount, 6)}
 - link: ${url}
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-bid now:`;
+join bid:`;
 
   const requestBody: any = {
     signer_uuid: env.FARCASTER_SIGNER_UUID,
     text,
   };
 
-  // Add embeds if embedUrl is provided
+  // Add embeds - for new bid, include both embedUrl and bid URL
   if (embedUrl) {
-    requestBody.embeds = [{ url: embedUrl }];
+    requestBody.embeds = [{ url: embedUrl }, { url: url }];
   }
 
   await fetch("https://api.neynar.com/v2/farcaster/cast", {

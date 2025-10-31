@@ -28,7 +28,7 @@ export const createTweet = async ({
 
   // Check if bid URL is an X/Twitter URL
   const isTwitterUrl = (checkUrl: string) => {
-    return checkUrl.includes('twitter.com') || checkUrl.includes('x.com');
+    return checkUrl.includes("twitter.com") || checkUrl.includes("x.com");
   };
 
   if (isContribution) {
@@ -45,11 +45,6 @@ join the bid:`;
     // Append embedUrl if provided (Twitter will unfurl as card)
     if (embedUrl) {
       text = `${text}\n\n${embedUrl}`;
-
-      // Add bid URL below deeplink, but only if it's not a Twitter/X URL
-      if (!isTwitterUrl(url)) {
-        text = `${text}\n${url}`;
-      }
     }
 
     await twitterClient.readWrite.v2.tweet(text);
@@ -64,7 +59,7 @@ join the bid:`;
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-bid now:`;
+join bid:`;
 
   // Append embedUrl if provided (Twitter will unfurl as card)
   if (embedUrl) {
