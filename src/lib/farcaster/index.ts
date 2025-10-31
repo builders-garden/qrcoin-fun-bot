@@ -13,8 +13,8 @@ export interface DeepLinkEmbedParams {
  * Matches the normalization used in QR-auction-web
  */
 function cleanUrl(url: string): string {
-  let cleaned = url.replace(/^https?:\/\//, ''); // Remove http:// or https://
-  cleaned = cleaned.replace(/\/$/, ''); // Remove trailing slash
+  let cleaned = url.replace(/^https?:\/\//, ""); // Remove http:// or https://
+  cleaned = cleaned.replace(/\/$/, ""); // Remove trailing slash
   return cleaned;
 }
 
@@ -98,7 +98,7 @@ join the bid:`;
     return;
   }
 
-  let text = `new bid started by @${name}!
+  const text = `new bid started by @${name}!
 
 - amount: $${formatUnits(amount, 6)}
 - link: ${url}
