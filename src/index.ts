@@ -1,5 +1,5 @@
 import { ponder } from "ponder:registry";
-import { createCast } from "./lib/farcaster";
+import { createCast, createDeepLinkEmbed } from "./lib/farcaster";
 import { Abi, createPublicClient, Hex, http } from "viem";
 import { base } from "viem/chains";
 import { env } from "./env";
@@ -18,6 +18,7 @@ const createFromEvent = async ({
   isContribution,
   contractAbi,
   contractAddress,
+  auctionId,
 }: {
   address: Hex;
   amount: bigint;
@@ -28,6 +29,7 @@ const createFromEvent = async ({
   isContribution: boolean;
   contractAbi: Abi;
   contractAddress: Hex;
+  auctionId: number;
 }): Promise<void> => {
   const publicClient = createPublicClient({
     chain: base,
@@ -60,6 +62,12 @@ const createFromEvent = async ({
     (account) => account.platform === "x"
   )?.username;
 
+  // Generate deep link embed URL for QR-auction-web
+  const embedUrl = createDeepLinkEmbed({
+    auctionId,
+    joinBidUrl: urlString,
+  });
+
   await Promise.allSettled([
     createCast({
       name: farcasterUsername ? farcasterUsername : name ? name : address,
@@ -69,6 +77,7 @@ const createFromEvent = async ({
       endTime,
       totalBidAmount: totalAmount,
       isContribution,
+      embedUrl,
     }),
     createTweet({
       name: name ? name : xUsername ? xUsername : address,
@@ -93,7 +102,7 @@ ponder.on("qrAuctionV4:setup", async () => {
 });
 
 ponder.on("qrAuctionV4:AuctionBid", async ({ event, context }) => {
-  const { bidder, amount, endTime, urlString, name } = event.args;
+  const { tokenId, bidder, amount, endTime, urlString, name } = event.args;
 
   await createFromEvent({
     address: bidder,
@@ -105,11 +114,12 @@ ponder.on("qrAuctionV4:AuctionBid", async ({ event, context }) => {
     isContribution: false,
     contractAbi: context.contracts.qrAuctionV4.abi,
     contractAddress: context.contracts.qrAuctionV4.address,
+    auctionId: Number(tokenId),
   });
 });
 
 ponder.on("qrAuctionV4:BidContributionMade", async ({ event, context }) => {
-  const { contributor, amount, endTime, urlString, name, totalAmount } =
+  const { tokenId, contributor, amount, endTime, urlString, name, totalAmount } =
     event.args;
 
   await createFromEvent({
@@ -122,5 +132,6 @@ ponder.on("qrAuctionV4:BidContributionMade", async ({ event, context }) => {
     isContribution: true,
     contractAbi: context.contracts.qrAuctionV4.abi,
     contractAddress: context.contracts.qrAuctionV4.address,
+    auctionId: Number(tokenId),
   });
 });
