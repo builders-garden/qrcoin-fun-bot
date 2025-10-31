@@ -73,7 +73,7 @@ export const createCast = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-join the bid: https://qrcoin.fun`;
+join the bid:`;
 
     const requestBody: any = {
       signer_uuid: env.FARCASTER_SIGNER_UUID,
@@ -105,7 +105,7 @@ join the bid: https://qrcoin.fun`;
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-bid now: https://qrcoin.fun`;
+bid now:`;
 
   const requestBody: any = {
     signer_uuid: env.FARCASTER_SIGNER_UUID,

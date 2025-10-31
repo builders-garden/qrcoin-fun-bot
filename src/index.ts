@@ -87,6 +87,7 @@ const createFromEvent = async ({
       endTime,
       totalBidAmount: totalAmount,
       isContribution,
+      embedUrl,
     }),
   ]);
 };
