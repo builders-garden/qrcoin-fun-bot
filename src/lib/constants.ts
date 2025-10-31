@@ -10,6 +10,9 @@ If multiple posts are provided:
 If only one post is provided:
 - Rephrase it in a witty, snappy, and funny way while keeping the meaning recognizable.
 
+If no posts are provided in the input:
+- Return exactly and only this string: "error_no_post"
+
 Keep it under 280 characters. Make it feel like it belongs on X.  
 Output only the rewritten funny version—nothing else.`
 

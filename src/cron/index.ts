@@ -25,6 +25,7 @@ const getLatestPosts = async () => {
   console.log(`Retrieved ${tweets.length} total tweets from search`);
 
   if (tweets.length === 0) {
+    console.log("No posts found");
     return null;
   }
 
@@ -36,6 +37,10 @@ const getLatestPosts = async () => {
       (a: any, b: any) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
+  if (recentPosts.length === 0) {
+    console.log("No posts found from the last hour");
+    return null;
+  }
 
   // Log posts for debugging
   recentPosts.forEach((post: any, index: number) => {
@@ -56,8 +61,7 @@ const getLatestPosts = async () => {
 export const cronJob = async () => {
   const latestPosts = await getLatestPosts();
 
-  if (!latestPosts) {
-    console.log("No posts found from the last hour");
+  if (!latestPosts || latestPosts.length === 0) {
     return;
   }
 
@@ -66,7 +70,12 @@ export const cronJob = async () => {
     prompt: `${SYSTEM_TEMPLATE}\n\n${latestPosts.join("\n")}`,
   });
   console.log(text, "text");
-  
+
+  if (text === "error_no_post") {
+    console.log("The agent was unable to find any posts to rewrite");
+    return;
+  }
+
   await Promise.allSettled([
     twitterClient.readWrite.v2.tweet(text),
     fetch("https://api.neynar.com/v2/farcaster/cast", {
