@@ -26,6 +26,11 @@ export const createTweet = async ({
     Math.floor(Number(endTime) - Date.now() / 1000)
   );
 
+  // Check if bid URL is an X/Twitter URL
+  const isTwitterUrl = (checkUrl: string) => {
+    return checkUrl.includes('twitter.com') || checkUrl.includes('x.com');
+  };
+
   if (isContribution) {
     let text = `new contribution by @${name}!
 
@@ -40,6 +45,11 @@ join the bid:`;
     // Append embedUrl if provided (Twitter will unfurl as card)
     if (embedUrl) {
       text = `${text}\n\n${embedUrl}`;
+
+      // Add bid URL below deeplink, but only if it's not a Twitter/X URL
+      if (!isTwitterUrl(url)) {
+        text = `${text}\n${url}`;
+      }
     }
 
     await twitterClient.readWrite.v2.tweet(text);
@@ -59,6 +69,11 @@ bid now:`;
   // Append embedUrl if provided (Twitter will unfurl as card)
   if (embedUrl) {
     text = `${text}\n\n${embedUrl}`;
+
+    // Add bid URL below deeplink, but only if it's not a Twitter/X URL
+    if (!isTwitterUrl(url)) {
+      text = `${text}\n${url}`;
+    }
   }
 
   await twitterClient.readWrite.v2.tweet(text);
