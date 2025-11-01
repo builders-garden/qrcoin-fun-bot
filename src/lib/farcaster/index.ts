@@ -73,7 +73,7 @@ export const createCast = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-join the bid:`;
+join bid:`;
 
     const requestBody: any = {
       signer_uuid: env.FARCASTER_SIGNER_UUID,

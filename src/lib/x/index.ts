@@ -40,7 +40,7 @@ export const createTweet = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-join the bid:`;
+join bid:`;
 
     // Append embedUrl if provided (Twitter will unfurl as card)
     if (embedUrl) {
