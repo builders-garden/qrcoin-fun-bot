@@ -44,7 +44,7 @@ join the bid:`;
 
     // Append embedUrl if provided (Twitter will unfurl as card)
     if (embedUrl) {
-      text = `${text}\n\n${embedUrl}`;
+      text = `${text} ${embedUrl}`;
     }
 
     await twitterClient.readWrite.v2.tweet(text);
@@ -63,7 +63,7 @@ join bid:`;
 
   // Append embedUrl if provided (Twitter will unfurl as card)
   if (embedUrl) {
-    text = `${text}\n\n${embedUrl}`;
+    text = `${text} ${embedUrl}`;
 
     // Add bid URL below deeplink, but only if it's not a Twitter/X URL
     if (!isTwitterUrl(url)) {
