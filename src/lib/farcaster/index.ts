@@ -13,8 +13,8 @@ export interface DeepLinkEmbedParams {
  * Matches the normalization used in QR-auction-web
  */
 function cleanUrl(url: string): string {
-  let cleaned = url.replace(/^https?:\/\//, ''); // Remove http:// or https://
-  cleaned = cleaned.replace(/\/$/, ''); // Remove trailing slash
+  let cleaned = url.replace(/^https?:\/\//, ""); // Remove http:// or https://
+  cleaned = cleaned.replace(/\/$/, ""); // Remove trailing slash
   return cleaned;
 }
 
@@ -73,7 +73,7 @@ export const createCast = async ({
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-join the bid:`;
+join bid:`;
 
     const requestBody: any = {
       signer_uuid: env.FARCASTER_SIGNER_UUID,
@@ -105,16 +105,16 @@ join the bid:`;
 - time remaining: ${timeRemaining}
 - current lead bid: $${formatUnits(leadBid, 6)}
 
-bid now:`;
+join bid:`;
 
   const requestBody: any = {
     signer_uuid: env.FARCASTER_SIGNER_UUID,
     text,
   };
 
-  // Add embeds if embedUrl is provided
+  // Add embeds - for new bid, include both embedUrl and bid URL
   if (embedUrl) {
-    requestBody.embeds = [{ url: embedUrl }];
+    requestBody.embeds = [{ url: embedUrl }, { url: url }];
   }
 
   await fetch("https://api.neynar.com/v2/farcaster/cast", {
