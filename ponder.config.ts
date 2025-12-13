@@ -11,7 +11,7 @@ export default createConfig({
     qrAuctionV4: {
       startBlock: "latest",
       abi: qrAuctionV4Abi,
-      address: "0xcb3b4678b623984158b1d1fcd4062d5a0b56bc7f",
+      address: "0x6a0fb6dfda897dae3c69d06d5d6b5d6b251281da",
       chain: "base",
     },
   },
