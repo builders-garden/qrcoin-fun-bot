@@ -3,7 +3,6 @@ import { createCast, createDeepLinkEmbed } from "./lib/farcaster";
 import { Abi, createPublicClient, Hex, http } from "viem";
 import { base } from "viem/chains";
 import { env } from "./env";
-import { createTweet } from "./lib/x";
 import { BulkUsersByAddressResponse } from "@neynar/nodejs-sdk/build/api";
 import * as cron from "node-cron";
 import { cronJob } from "./cron";
@@ -68,28 +67,17 @@ const createFromEvent = async ({
     joinBidUrl: urlString,
   });
 
-  await Promise.allSettled([
-    createCast({
-      name: farcasterUsername ? farcasterUsername : name ? name : address,
-      amount,
-      url: urlString,
-      leadBid,
-      endTime,
-      totalBidAmount: totalAmount,
-      isContribution,
-      embedUrl,
-    }),
-    createTweet({
-      name: name ? name : xUsername ? xUsername : address,
-      amount,
-      url: urlString,
-      leadBid,
-      endTime,
-      totalBidAmount: totalAmount,
-      isContribution,
-      embedUrl,
-    }),
-  ]);
+  // Bids only go to Farcaster @qrbids (no Twitter)
+  await createCast({
+    name: farcasterUsername ? farcasterUsername : name ? name : address,
+    amount,
+    url: urlString,
+    leadBid,
+    endTime,
+    totalBidAmount: totalAmount,
+    isContribution,
+    embedUrl,
+  });
 };
 
 ponder.on("qrAuctionV4:setup", async () => {

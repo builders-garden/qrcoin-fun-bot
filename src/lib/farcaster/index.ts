@@ -76,7 +76,7 @@ export const createCast = async ({
 join bid:`;
 
     const requestBody: any = {
-      signer_uuid: env.FARCASTER_SIGNER_UUID,
+      signer_uuid: env.FARCASTER_QRBIDS_SIGNER_UUID, // @qrbids for bids
       text,
     };
 
@@ -108,7 +108,7 @@ join bid:`;
 join bid:`;
 
   const requestBody: any = {
-    signer_uuid: env.FARCASTER_SIGNER_UUID,
+    signer_uuid: env.FARCASTER_QRBIDS_SIGNER_UUID, // @qrbids for bids
     text,
   };
 
