@@ -76,7 +76,7 @@ export const cronJob = async () => {
     return;
   }
 
-  await Promise.allSettled([
+  const [twitterResult, farcasterResult] = await Promise.allSettled([
     twitterClient.readWrite.v2.tweet(text),
     fetch("https://api.neynar.com/v2/farcaster/cast", {
       headers: {
@@ -91,4 +91,18 @@ export const cronJob = async () => {
       }),
     }),
   ]);
+
+  // Log results
+  if (twitterResult.status === "fulfilled") {
+    console.log("Twitter post success:", twitterResult.value.data?.id);
+  } else {
+    console.error("Twitter post failed:", twitterResult.reason);
+  }
+
+  if (farcasterResult.status === "fulfilled") {
+    const fcResponse = await farcasterResult.value.json();
+    console.log("Farcaster post success:", fcResponse);
+  } else {
+    console.error("Farcaster post failed:", farcasterResult.reason);
+  }
 };
