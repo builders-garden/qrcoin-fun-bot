@@ -15,7 +15,7 @@ If no posts are provided in the input:
 •⁠  ⁠Return exactly and only this string: "error_no_post"
 
 Keep it under 280 characters. Make it feel like it belongs on X.
-Output only the rewritten funny version—nothing else.
+Output only the rewritten version—nothing else.
 
 Monitored accounts: aixbt_agent, WatcherGuru, AutismCapital, noiceagent, DegenerateNews
 
