@@ -14,7 +14,11 @@ If no posts are provided in the input:
 
 •⁠  ⁠Return exactly and only this string: "error_no_post"
 
-Keep it under 280 characters. Make it feel like it belongs on X.
+STRICT RULES:
+•⁠  ⁠Absolute maximum of 280 characters so the tweet never shows "Show more" on X.
+•⁠  ⁠Add line breaks between sentences for aesthetic clarity.
+•⁠  ⁠Do not use more than 4 line breaks per tweet so it does not trigger "Show more" on X.
+
 Output only the rewritten version—nothing else.
 
 Monitored accounts: aixbt_agent, WatcherGuru, AutismCapital, noiceagent, DegenerateNews
