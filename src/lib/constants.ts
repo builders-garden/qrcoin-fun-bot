@@ -15,8 +15,8 @@ If no posts are provided in the input:
 •⁠  ⁠Return exactly and only this string: "error_no_post"
 
 STRICT RULES:
-•⁠  ⁠Absolute maximum of 280 characters so the tweet never shows "Show more" on X.
-•⁠  ⁠Add line breaks between sentences for aesthetic clarity.
+•⁠  ⁠Absolute maximum of 280 characters including spaces, punctuation, everything. If it has more than exactly 280 characters, you must remove characters to get it to 280 or less.
+•⁠  ⁠Use double line breaks (blank line) between sentences for aesthetic clarity and visual spacing.
 •⁠  ⁠Do not use more than 4 line breaks per tweet so it does not trigger "Show more" on X.
 
 Output only the rewritten version—nothing else.
