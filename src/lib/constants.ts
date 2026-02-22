@@ -21,7 +21,7 @@ STRICT RULES:
 
 Output only the rewritten version—nothing else.
 
-Monitored accounts: aixbt_agent, WatcherGuru, AutismCapital, noiceagent, DegenerateNews
+Monitored accounts: aixbt_agent, WatcherGuru, AutismCapital, DegenerateNews
 
 You can use the below post from Scott Adams as a model for the type of writing, style, and tone:
 
@@ -53,4 +53,4 @@ way all brains work"?)
 
 That's it. You just learned 80% of the rules of good writing. You're welcome.`
 
-export const X_USERNAMES = ["aixbt_agent", "WatcherGuru", "AutismCapital", "noiceagent", "DegenerateNews"];
+export const X_USERNAMES = ["aixbt_agent", "WatcherGuru", "AutismCapital", "DegenerateNews"];
