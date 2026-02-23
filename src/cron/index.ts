@@ -10,14 +10,27 @@ const getLatestPosts = async () => {
     (u) => `from:${u} -is:retweet -is:reply -is:quote`
   ).join(" OR ");
 
-  // Perform a single recent search request
-  const searchResult = await twitterClientReadOnly.readOnly.v2.search(query, {
-    max_results: 50,
-    "tweet.fields": ["created_at", "text", "id", "author_id"],
-    expansions: ["author_id"],
-    "user.fields": ["username", "name", "profile_image_url"],
-    sort_order: "recency", // ensure newest first
-  });
+  let searchResult;
+  try {
+    // Perform a single recent search request
+    searchResult = await twitterClientReadOnly.readOnly.v2.search(query, {
+      max_results: 50,
+      "tweet.fields": ["created_at", "text", "id", "author_id"],
+      expansions: ["author_id"],
+      "user.fields": ["username", "name", "profile_image_url"],
+      sort_order: "recency", // ensure newest first
+    });
+  } catch (error: any) {
+    // Handle X API pay-per-use errors (402 = credits depleted, 403 = not enrolled)
+    if (error?.code === 402 || error?.data?.status === 402) {
+      console.error("[X API] Credits depleted - add credits at developer.x.com");
+    } else if (error?.code === 403 || error?.data?.status === 403) {
+      console.error("[X API] Forbidden - app may not be enrolled in a project");
+    } else {
+      console.error("[X API] Search failed:", error?.message || error);
+    }
+    return null;
+  }
 
   const tweets = searchResult.data.data || [];
   //const users = searchResult.data.includes?.users || [];
@@ -76,8 +89,17 @@ export const cronJob = async () => {
     return;
   }
 
-  await Promise.allSettled([
-    twitterClient.readWrite.v2.tweet(text),
+  const results = await Promise.allSettled([
+    twitterClient.readWrite.v2.tweet(text).catch((err: any) => {
+      if (err?.code === 402 || err?.data?.status === 402) {
+        console.error("[X API] Credits depleted when posting - add credits at developer.x.com");
+      } else if (err?.code === 403 || err?.data?.status === 403) {
+        console.error("[X API] Forbidden when posting - check app enrollment and access tokens");
+      } else {
+        console.error("[X API] Tweet failed:", err?.message || err);
+      }
+      throw err;
+    }),
     fetch("https://api.neynar.com/v2/farcaster/cast", {
       headers: {
         accept: "application/json",
@@ -91,4 +113,12 @@ export const cronJob = async () => {
       }),
     }),
   ]);
+
+  // Log results for monitoring
+  results.forEach((result, i) => {
+    const target = i === 0 ? "X/Twitter" : "Farcaster";
+    if (result.status === "rejected") {
+      console.error(`[Cron] ${target} post failed:`, result.reason?.message || result.reason);
+    }
+  });
 };
